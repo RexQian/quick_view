@@ -1,0 +1,51 @@
+<%
+   custom_fields = @issues.map(&:available_custom_fields).reduce(:&).select do |f|
+     #concat f.field_format
+     %w(string date int).include?(f.field_format)
+   end
+
+   issue = @issues.first
+%>
+  <li><%= context_menu_link(
+            l(:button_quick_view),
+            "javascript:quick_view_show_dialog()",
+            :class => 'icon-show'
+         ) %></li>
+ 
+  <div id="quick_view_dialog" style="display:none; background-color: white;" title="Quick View - <%= issue.subject %>">
+     <div class="issue">
+     <div class="wiki">
+     <% if issue.description? %>
+     <%= textilizable issue, :description, :attachments => issue.attachments %>
+     <% else %>
+     <i>description is none.</i>
+     <% end %>
+     </div>
+     </div>
+  </div>
+
+<script>
+//<![CDATA[
+function quick_view_show_dialog() {
+  $("#quick_view_dialog").dialog({
+     modal: true,
+     closeOnEscape: false,
+     width: 800,
+     height: 480,
+     buttons: {
+        "close" : quick_view_dialog_cancel
+     },
+     close: quick_view_dialog_close
+  });
+}
+
+function quick_view_dialog_close(){
+  $("#quick_view_dialog").remove();
+}
+
+function quick_view_dialog_cancel(){
+  $("#quick_view_dialog").dialog("close");
+}
+
+//]]>
+</script>

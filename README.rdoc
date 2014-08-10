@@ -1,0 +1,16 @@
+= Quick View
+
+Plugin's features:
+- You can see a context menu to see the details of the issue.
+
+INSTALL:
+
+- Download the plugin to your plugins directory.
+
+  examples)
+  cd redmine/plugins/
+  git clone git://git.sourceforge.jp/gitroot/quickedit/quick_view.git
+
+- Restart your redmine.
+
+
