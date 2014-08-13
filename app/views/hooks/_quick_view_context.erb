@@ -1,10 +1,13 @@
 <%
-   custom_fields = @issues.map(&:available_custom_fields).reduce(:&).select do |f|
-     #concat f.field_format
-     %w(string date int).include?(f.field_format)
-   end
+   extend CustomFieldsHelper
+   extend JournalsHelper
 
    issue = @issues.first
+   journals = issue.journals.includes(:user, :details).reorder("#{Journal.table_name}.id ASC").all
+   journals.each_with_index {|j,i| j.indice = i+1}
+   journals.reject!(&:private_notes?) unless User.current.allowed_to?(:view_private_notes, issue.project)
+   journals.reverse! if User.current.wants_comments_in_reverse_order?
+    
 %>
   <li><%= context_menu_link(
             l(:button_quick_view),
@@ -14,14 +17,37 @@
  
   <div id="quick_view_dialog" style="display:none; background-color: white;" title="Quick View - <%= issue.subject %>">
      <div class="issue">
-     <div class="wiki">
-     <% if issue.description? %>
-     <%= textilizable issue, :description, :attachments => issue.attachments %>
-     <% else %>
-     <i>description is none.</i>
+        <div class="subject">
+        <%= render_issue_subject_with_tree(issue) %>
+        </div>
+        <p class="author">
+        <%= authoring issue.created_on, issue.author %>.
+        <% if issue.created_on != issue.updated_on %>
+        <%= l(:label_updated_time, time_tag(issue.updated_on)).html_safe %>.
+        <% end %>
+        </p>
+
+        <hr />
+         
+        <div class="description">
+          <p><strong><%=l(:field_description)%></strong></p>
+          <div class="wiki">
+          <% if issue.description? %>
+          <%= textilizable issue, :description, :attachments => issue.attachments %>
+          <% else %>
+          <i>description is none.</i>
+          <% end %>
+          </div>
+        </div>
+     </div>
+
+     <% if journals.present? %>
+     <div id="history">
+     <h3><%=l(:label_history)%></h3>
+     <%= render :partial => '../../../../app/views/issues/history', :locals => { :issue => issue, :journals => journals } %>
+     </div>
      <% end %>
-     </div>
-     </div>
+
   </div>
 
 <script>
