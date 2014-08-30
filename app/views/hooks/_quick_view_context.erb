@@ -16,95 +16,18 @@
             "javascript:quick_view_show_dialog(#{issue.id})",
             :class => 'icon-show'
          ) %></li>
-<%
-  dialog_html_id = "quick_view_dialog_#{dialog_id}"
-%> 
-  <div id="<%= dialog_html_id %>" class="quick_view_dialog" style="display:none; background-color: white;" title="Quick View - <%= issue.subject %>" data-issue="<%= issue.id.to_s %>">
-     <div class="issue">
-        <div class="subject">
-        <%= render_issue_subject_with_tree(issue) %>
-        </div>
-        <p class="author">
-        <%= authoring issue.created_on, issue.author %>.
-        <% if issue.created_on != issue.updated_on %>
-        <%= l(:label_updated_time, time_tag(issue.updated_on)).html_safe %>.
-        <% end %>
-        </p>
 
-        <table class="attributes">
-        <%= issue_fields_rows do |rows|
-          rows.left l(:field_status), h(issue.status.name), :class => 'status'
-          rows.left l(:field_priority), h(issue.priority.name), :class => 'priority'
-
-          unless issue.disabled_core_fields.include?('assigned_to_id')
-            rows.left l(:field_assigned_to), avatar(issue.assigned_to, :size => "14").to_s.html_safe + (issue.assigned_to ? link_to_user(issue.assigned_to) : "-"), :class => 'assigned-to'
-          end
-          unless issue.disabled_core_fields.include?('category_id')
-            rows.left l(:field_category), h(issue.category ? issue.category.name : "-"), :class => 'category'
-          end
-          unless issue.disabled_core_fields.include?('fixed_version_id')
-            rows.left l(:field_fixed_version), (issue.fixed_version ? link_to_version(issue.fixed_version) : "-"), :class => 'fixed-version'
-          end
-
-          unless issue.disabled_core_fields.include?('start_date')
-            rows.right l(:field_start_date), format_date(issue.start_date), :class => 'start-date'
-          end
-          unless issue.disabled_core_fields.include?('due_date')
-            rows.right l(:field_due_date), format_date(issue.due_date), :class => 'due-date'
-          end
-          unless issue.disabled_core_fields.include?('done_ratio')
-            rows.right l(:field_done_ratio), progress_bar(issue.done_ratio, :width => '80px', :legend => "#{issue.done_ratio}%"), :class => 'progress'
-          end
-          unless issue.disabled_core_fields.include?('estimated_hours')
-            unless issue.estimated_hours.nil?
-              rows.right l(:field_estimated_hours), l_hours(issue.estimated_hours), :class => 'estimated-hours'
-            end
-          end
-          if User.current.allowed_to?(:view_time_entries, @project)
-            rows.right l(:label_spent_time), (issue.total_spent_hours > 0 ? link_to(l_hours(issue.total_spent_hours), project_issue_time_entries_path(@project, issue)) : "-"), :class => 'spent-time'
-          end
-
-        end %>
-
-        <%= render_custom_fields_rows(issue) %>
-        </table>
-
-        <hr />
-         
-        <div class="description">
-          <p><strong><%=l(:field_description)%></strong></p>
-          <div class="wiki">
-          <% if issue.description? %>
-          <%= textilizable issue, :description, :attachments => issue.attachments %>
-          <% else %>
-          <i>description is none.</i>
-          <% end %>
-          </div>
-          <% if issue.attachments.any? %>
-          <%= link_to_attachments issue, :thumbnails => true %>
-          <% end %>
-        </div>
-     </div>
-
-     <% if journals.present? %>
-     <div id="history">
-     <h3><%=l(:label_history)%></h3>
-     <%= render :partial => '../../../../app/views/issues/history', :locals => { :issue => issue, :journals => journals } %>
-     </div>
-     <% end %>
-
-  </div>
+<%= render 'hooks/quick_view_issue_dialog', :project => @project, :issue => issue %> 
 
 <script>
 //<![CDATA[
 
 function quick_view_show_dialog(issue_id) {
-  var dialog_id='<%= dialog_html_id %>';
-  if (issue_id) {
-    dialog_id = $(".quick_view_dialog[data-issue=%s]".replace('%s',issue_id)).attr("id");
-  } else {
-    issue_id = $(dialog_id).attr("data-issue");
+  if (!issue_id) {
+     return;
   }
+
+  var  dialog_id = $(".quick_view_dialog[data-issue=%s]".replace('%s',issue_id)).attr("id");
 
   var last = $(".quick_view_dialog:last");
   var position = null;
