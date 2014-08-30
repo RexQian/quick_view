@@ -13,13 +13,13 @@
 %>
   <li><%= context_menu_link(
             l(:button_quick_view),
-            "javascript:quick_view_show_dialog()",
+            "javascript:quick_view_show_dialog(#{issue.id})",
             :class => 'icon-show'
          ) %></li>
 <%
   dialog_html_id = "quick_view_dialog_#{dialog_id}"
 %> 
-  <div id="<%= dialog_html_id %>" class="quick_view_dialog" style="display:none; background-color: white;" title="Quick View - <%= issue.subject %>">
+  <div id="<%= dialog_html_id %>" class="quick_view_dialog" style="display:none; background-color: white;" title="Quick View - <%= issue.subject %>" data-issue="<%= issue.id.to_s %>">
      <div class="issue">
         <div class="subject">
         <%= render_issue_subject_with_tree(issue) %>
@@ -98,8 +98,13 @@
 <script>
 //<![CDATA[
 
-function quick_view_show_dialog() {
+function quick_view_show_dialog(issue_id) {
   var dialog_id='<%= dialog_html_id %>';
+  if (issue_id) {
+    dialog_id = $(".quick_view_dialog[data-issue=%s]".replace('%s',issue_id)).attr("id");
+  } else {
+    issue_id = $(dialog_id).attr("data-issue");
+  }
 
   var last = $(".quick_view_dialog:last");
   var position = null;
