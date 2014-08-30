@@ -8,15 +8,18 @@
    journals.each_with_index {|j,i| j.indice = i+1}
    journals.reject!(&:private_notes?) unless User.current.allowed_to?(:view_private_notes, issue.project)
    journals.reverse! if User.current.wants_comments_in_reverse_order?
-    
+
+   dialog_id = Time.now.to_i
 %>
   <li><%= context_menu_link(
             l(:button_quick_view),
             "javascript:quick_view_show_dialog()",
             :class => 'icon-show'
          ) %></li>
- 
-  <div id="quick_view_dialog" style="display:none; background-color: white;" title="Quick View - <%= issue.subject %>">
+<%
+  dialog_html_id = "quick_view_dialog_#{dialog_id}"
+%> 
+  <div id="<%= dialog_html_id %>" class="quick_view_dialog" style="display:none; background-color: white;" title="Quick View - <%= issue.subject %>">
      <div class="issue">
         <div class="subject">
         <%= render_issue_subject_with_tree(issue) %>
@@ -94,12 +97,22 @@
 
 <script>
 //<![CDATA[
+
 function quick_view_show_dialog() {
-  $("#quick_view_dialog").dialog({
-     modal: true,
+  var dialog_id='<%= dialog_html_id %>';
+
+  var last = $(".quick_view_dialog:last");
+  var position = null;
+  if (last.attr("id") != dialog_id) {
+     position={ my: "left top", at: "left+10px top+10px", of : last };
+  }
+
+  $('#'+dialog_id).dialog({
+     modal: false,
      closeOnEscape: false,
      width: 800,
      height: 480,
+     position: position,
      buttons: {
         "close" : quick_view_dialog_cancel
      },
@@ -108,11 +121,11 @@ function quick_view_show_dialog() {
 }
 
 function quick_view_dialog_close(){
-  $("#quick_view_dialog").remove();
+  $(this).remove();
 }
 
 function quick_view_dialog_cancel(){
-  $("#quick_view_dialog").dialog("close");
+  $(this).dialog("close");
 }
 
 //]]>
