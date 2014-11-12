@@ -1,0 +1,102 @@
+<div id="quick_view_dialogs"></div>
+<%= form_tag({:controller=>'quick_view_issues', :action=>:show, :id=>0}, :method=>:get, :id=> 'quick_view_form') do %>
+<% end %>
+<script>
+//<![CDATA[
+var lastmoved = Date.now();
+var me = null;
+/*
+$(".issue").mouseover( function () {
+   me = this;
+   setTimeout(delayToolTip, 3000);
+   lastmoved = Date.now();
+});
+$(".issue").tooltip({track:true});
+*/
+function delayToolTip(){
+   var elapsed = Date.now() - lastmoved;
+   if (elapsed > 2900) {
+      //$(me).attr("title", getContent(me));
+      getContent(me);
+      //$(me).tooltip("open");
+   }
+}
+function getContent(me){
+   var content;
+   var issue_id = $(me).attr("id").slice("issue-".length);
+   var url='<%= issues_path() %>/'+issue_id+".json";
+   console.log(url);
+
+   $.ajax({url: url, dataType: 'json'}).done( function(data){
+      //console.log(data.issue.id + ":" + data.issue.description);
+      console.log(data.issue.id + ": get");
+      //content = '<div class="tooltip-content" style="overflow: hidden;">' + data.issue.description+'</div>';
+      $(me).attr("title", data.issue.description);
+   });
+   return content;
+}
+
+function rewriteToolTip(){
+
+}
+
+function quick_view_show_dialog(issue_id) {
+  if (!issue_id) {
+     return;
+  }
+
+  //$(".quick_view_dialog").each(function() {
+  //   alert($(this).attr("id"));
+  //});
+
+  for (var i = 0; i < arguments.length; ++i) {
+     var issue_id = arguments[i];
+     var url = '/quick_view_issues/' + issue_id;
+     $("quick_view_form").attr("action", url);
+     $.ajax({url: url, data: $("quick_view_format").serialize(), dataType: 'html', success: function(data){
+//       console.log(data.issue.id + ": get");
+        var res = data;
+        console.log(res);
+        $("#quick_view_dialogs").append(res);
+
+        var search_id_str = "[data-issue=\"%s\"]".replace('%s',issue_id);
+        var matched = /id="(quick_view_dialog_[0-9]+)"/.exec(res);
+        console.log("search_id=" + matched[1]);
+        var dialog_id = matched[1];
+        console.log("dialog_id=" + dialog_id);
+
+        var last = $(".quick_view_dialog:visible:last");
+        var position = null;
+        if (last.length == 1 && last.attr("id") != dialog_id) {
+           position={ my: "left top", at: "left+10px top+10px", of : last };
+        }
+
+        $('#'+dialog_id).dialog({
+           modal: false,
+           closeOnEscape: false,
+           width: 800,
+           height: 480,
+           position: position,
+           show: "clip",
+           close: "clip",
+           buttons: {
+              "close" : quick_view_dialog_cancel
+           },
+           close: quick_view_dialog_close
+        });
+     }});
+  };
+}
+
+function quick_view_dialog_close(){
+  $(this).remove();
+}
+
+function quick_view_dialog_cancel(){
+  $(this).dialog("close");
+}
+
+
+//]]>
+</script>
+
