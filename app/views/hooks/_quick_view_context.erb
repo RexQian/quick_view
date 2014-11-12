@@ -1,4 +1,4 @@
-<%
+<%-
    extend AttachmentsHelper
    extend CustomFieldsHelper
    extend JournalsHelper
@@ -10,41 +10,53 @@
    journals.reverse! if User.current.wants_comments_in_reverse_order?
 
    dialog_id = Time.now.to_i
-%>
-<% if @issues.size == 1  %>
+-%>
+<%# -------------------------------------- %>
+<%# 一つだけ選択、かつ、親も子も関連もなし %>
+<%# -------------------------------------- %>
+<% if @issues.size == 1 && issue.root? && !issue.children? && issue.relations.none? %>
+  <li><%= context_menu_link( l(:button_quick_view),
+                             "javascript:quick_view_show_dialog(#{issue.id})",
+                             :class => 'icon-show') %></li>
+<%# ----------------------------00-------- %>
+<%# 一つだけ選択、かつ、親か子か関連あり   %>
+<%# -------------------------------------- %>
+<% elsif @issues.size == 1 %>
   <li class="folder">
     <a href="#" class="submenu"><%= l(:button_quick_view) %></a>
     <ul>
-      <li><%= context_menu_link( "\##{issue.id}",
+  <% unless issue.root? %>
+    <li><%= context_menu_link( "\##{issue.parent.id} (Parent)",
+                               "javascript:quick_view_show_dialog(#{issue.parent.id})",
+                               :class => 'icon-show') %></li>
+  <% end %>
+      <li><%= context_menu_link( "\##{issue.id} (This)",
                                  "javascript:quick_view_show_dialog(#{issue.id})",
                                  :class => 'icon-show') %></li>
-  <% unless issue.root? %>
-    <% issue.ancestors.visible.all.each do |ancestor| %>
-      <li><%= context_menu_link( "\##{ancestor.id}",
-                                 "javascript:quick_view_show_dialog(#{ancestor.id})",
-                                 :class => 'icon-show') %></li>
-    <% end %>
+  <% issue.children.each do |child| %>
+    <li><%= context_menu_link( "\##{child.id} (Child)",
+                               "javascript:quick_view_show_dialog(#{child.id})",
+                               :class => 'icon-show') %></li>
   <% end %>
   <% if issue.relations.any? %>
       <hr>
     <% issue.relations.each do |relation| %>
       <% other_issue = relation.other_issue(issue) %>
-      <li><%= context_menu_link( l(relation.label_for(issue)) + " \##{other_issue.id}",
+      <% relation_label = l(relation.label_for(issue)) %>
+      <% relation_icon_url = image_path('link.png') %>
+      <li><%= context_menu_link( "\##{other_issue.id} (#{relation_label})",
                                      "javascript:quick_view_show_dialog(#{other_issue.id})",
                                      :class => 'icon-show',
-                                     :style => 'background-image: url("'+image_path('link.png')+'")' ) %></li>
-      <%# render 'hooks/quick_view_issue_dialog', :project => @project, :issue => other_issue %> 
+                                     :style => "background-image: url('#{relation_icon_url}')" ) %></li>
     <% end %>
   <% end %>
     </ul>
+<%# -------------------------------------- %>
+<%# その他                                 %>
+<%# -------------------------------------- %>
 <% else %>
-
   <% ids_as_str = @issue_ids.join(',') %>
   <li><%= context_menu_link( l(:button_quick_view),
                              "javascript:quick_view_show_dialog(#{ids_as_str})",
                              :class => 'icon-show') %></li>
-  <% @issues.each do |issue| %>
-    <%# render 'hooks/quick_view_issue_dialog', :project => @project, :issue => issue %> 
-  <% end %>
 <% end %>
-

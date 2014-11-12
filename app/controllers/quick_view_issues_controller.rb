@@ -4,13 +4,16 @@ class QuickViewIssuesController < ApplicationController
 
   def show
     respond_to do |format|
-      #render 'hooks/quick_view_issue_dialog', :project => @project, :issue => other_issue 
-      logger.debug ' *** format='+format.inspect
-      lookup_context.view_paths do |path|
-         logger.debug ' *** lookup='+path.to_s
-      end
-      logger.debug ' *** issue='+@issue.inspect
-      format.html { render :template => 'quick_view_issues/quick_view_issue_dialog', :layout => false, :project => @project, :issue => @issue  }
+      #logger.debug ' *** format='+format.inspect
+      #lookup_context.view_paths do |path|
+      #   logger.debug ' *** lookup='+path.to_s
+      #end
+      #logger.debug ' *** issue='+@issue.inspect
+      format.html {
+        render :template => 'quick_view_issues/quick_view_issue_dialog',
+               :layout => false,
+               :issue => @issue
+      }
     end
   end
 

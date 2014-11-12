@@ -1,16 +1,14 @@
 <%
   #template args
-  #  project - drawing target
   #  issue - drawing target
-  logger.debug "template"
 
   extend IssuesHelper
   extend AttachmentsHelper
   extend CustomFieldsHelper
   extend JournalsHelper
 
-  project = @project
   issue = @issue
+  project = @issue.project
   journals = issue.journals.includes(:user, :details).reorder("#{Journal.table_name}.id ASC").all
   journals.each_with_index {|j,i| j.indice = i+1}
   journals.reject!(&:private_notes?) unless User.current.allowed_to?(:view_private_notes, project)
@@ -18,8 +16,9 @@
 
   dialog_id = Time.now.to_i
   dialog_html_id = "quick_view_dialog_#{dialog_id}"
+  dialog_title = "Quick View - \##{issue.id} #{issue.subject}"
 %>
-  <div id="<%= dialog_html_id %>" class="quick_view_dialog" style="background-color: white;" title="Quick View - <%= issue.subject %>" data-issue="<%= issue.id.to_s %>">
+  <div id="<%= dialog_html_id %>" class="quick_view_dialog" style="background-color: white;" title="<%= dialog_title %>" data-issue="<%= issue.id.to_s %>">
      <div class="issue">
         <div class="subject">
         <%= render_issue_subject_with_tree(issue) %>
@@ -77,7 +76,7 @@
           <% if issue.description? %>
           <%= textilizable issue, :description, :attachments => issue.attachments %>
           <% else %>
-          <i>description is none.</i>
+          <i>description is empty</i>
           <% end %>
           </div>
           <% if issue.attachments.any? %>
@@ -94,4 +93,3 @@
      <% end %>
 
   </div>
-  <!--<script>$('#<%= dialog_html_id %>').dialog();</script>-->
