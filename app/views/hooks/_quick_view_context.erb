@@ -11,50 +11,40 @@
 
    dialog_id = Time.now.to_i
 %>
-  <li><%= context_menu_link(
-            l(:button_quick_view),
-            "javascript:quick_view_show_dialog(#{issue.id})",
-            :class => 'icon-show'
-         ) %></li>
+<% if @issues.size == 1  %>
+  <li class="folder">
+    <a href="#" class="submenu"><%= l(:button_quick_view) %></a>
+    <ul>
+      <li><%= context_menu_link( "\##{issue.id}",
+                                 "javascript:quick_view_show_dialog(#{issue.id})",
+                                 :class => 'icon-show') %></li>
+  <% unless issue.root? %>
+    <% issue.ancestors.visible.all.each do |ancestor| %>
+      <li><%= context_menu_link( "\##{ancestor.id}",
+                                 "javascript:quick_view_show_dialog(#{ancestor.id})",
+                                 :class => 'icon-show') %></li>
+    <% end %>
+  <% end %>
+  <% if issue.relations.any? %>
+      <hr>
+    <% issue.relations.each do |relation| %>
+      <% other_issue = relation.other_issue(issue) %>
+      <li><%= context_menu_link( l(relation.label_for(issue)) + " \##{other_issue.id}",
+                                     "javascript:quick_view_show_dialog(#{other_issue.id})",
+                                     :class => 'icon-show',
+                                     :style => 'background-image: url("'+image_path('link.png')+'")' ) %></li>
+      <%# render 'hooks/quick_view_issue_dialog', :project => @project, :issue => other_issue %> 
+    <% end %>
+  <% end %>
+    </ul>
+<% else %>
 
-<%= render 'hooks/quick_view_issue_dialog', :project => @project, :issue => issue %> 
+  <% ids_as_str = @issue_ids.join(',') %>
+  <li><%= context_menu_link( l(:button_quick_view),
+                             "javascript:quick_view_show_dialog(#{ids_as_str})",
+                             :class => 'icon-show') %></li>
+  <% @issues.each do |issue| %>
+    <%# render 'hooks/quick_view_issue_dialog', :project => @project, :issue => issue %> 
+  <% end %>
+<% end %>
 
-<script>
-//<![CDATA[
-
-function quick_view_show_dialog(issue_id) {
-  if (!issue_id) {
-     return;
-  }
-
-  var  dialog_id = $(".quick_view_dialog[data-issue=%s]".replace('%s',issue_id)).attr("id");
-
-  var last = $(".quick_view_dialog:last");
-  var position = null;
-  if (last.attr("id") != dialog_id) {
-     position={ my: "left top", at: "left+10px top+10px", of : last };
-  }
-
-  $('#'+dialog_id).dialog({
-     modal: false,
-     closeOnEscape: false,
-     width: 800,
-     height: 480,
-     position: position,
-     buttons: {
-        "close" : quick_view_dialog_cancel
-     },
-     close: quick_view_dialog_close
-  });
-}
-
-function quick_view_dialog_close(){
-  $(this).remove();
-}
-
-function quick_view_dialog_cancel(){
-  $(this).dialog("close");
-}
-
-//]]>
-</script>
