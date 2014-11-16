@@ -55,7 +55,7 @@
 <%# その他                                 %>
 <%# -------------------------------------- %>
 <% else %>
-  <% ids_as_str = @issue_ids.join(',') %>
+  <% ids_as_str = params[:ids].join(',') %>
   <li><%= context_menu_link( l(:button_quick_view),
                              "javascript:quick_view_show_dialog(#{ids_as_str})",
                              :class => 'icon-show') %></li>

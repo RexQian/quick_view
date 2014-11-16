@@ -1,19 +1,42 @@
 <div id="quick_view_dialogs"></div>
-<%= form_tag({:controller=>'quick_view_issues', :action=>:show, :id=>0}, :method=>:get, :id=> 'quick_view_form') do %>
-<% end %>
+
 <script>
 //<![CDATA[
-var quick_view_dialogs = 0;
+var quick_view_dialog_open_queue = 0;
+var quick_view_click_event_object = null;
+
+$("tr.issue").click(quick_view_issue_click);
+$("tr.issue").dblclick(quick_view_issue_dblclick);
+
+function quick_view_issue_click(event) {
+   quick_view_click_event_object = event;
+}
+
+function quick_view_issue_dblclick(event) {
+  var id = $(event.currentTarget).attr("id");
+  var m = /issue-(\d+)/.exec(id);
+  if (!m) return;
+
+  var issue_id = m[1];
+  quick_view_show_dialog(issue_id);
+}
 
 function quick_view_show_dialog() {
   if (arguments.length == 0) {
      return;
   }
 
-  quick_view_dialogs = 0;
+  quick_view_dialog_open_queue = arguments.length;
   for (var i = 0; i < arguments.length; ++i) {
      var issue_id = arguments[i];
-     var url = '/quick_view_issues/' + issue_id;
+
+     var already_exists=$("[data-issue="+issue_id+"]");
+     if (already_exists.length==1) {
+       already_exists.dialog("moveToTop");
+       continue;
+     }
+
+     var url = '<%= quick_view_issue_path(0) %>'.replace(/0$/,issue_id);
      $.ajax( { url: url, dataType: 'html', success: quick_view_dialog_open });
   }
 }
@@ -26,36 +49,24 @@ function quick_view_dialog_open(dialog_html) {
 
   var dialog_id = m[1];
 
-  var last = $(".quick_view_dialog:visible:last");
-  var position = null;
-  if (last.length == 1 && last.attr("id") != dialog_id) {
-     position={ my: "left top", at: "left+10px top+10px", of : last };
-  } else {
-     if (quick_view_dialogs == 0) {
-       position=null;
-       position={ my: "center", at: "center" };
-     } else {
-       adjust = quick_view_dialogs * 10;
-       position={ my: "center", at: "left"+adjust+"px top+"+adjust+"px" };
-     }
-  }
-  quick_view_dialogs++;
+  quick_view_dialog_open_queue--;
+  var adjust = (quick_view_dialog_open_queue * 30) + 'px';
+  var position = {my: "right-"+adjust+" center-"+adjust, of: quick_view_click_event_object};
 
   $('#'+dialog_id).dialog({
      modal: false,
      closeOnEscape: false,
-     width: 800,
-     height: 480,
+     width: 640,
+     height: 600,
      position: position,
-     show: "clip",
-     close: "clip",
+     show: {effect:"clip", easing:"easeInQuad"},
+     hide: {effect:"clip", easing:"easeOutQuad"},
      buttons: {
         "close" : quick_view_dialog_cancel
      },
      close: quick_view_dialog_close
   });
 }
-
 
 function quick_view_dialog_close(){
   $(this).remove();
@@ -64,8 +75,6 @@ function quick_view_dialog_close(){
 function quick_view_dialog_cancel(){
   $(this).dialog("close");
 }
-
-
 //]]>
 </script>
 
