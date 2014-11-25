@@ -13,11 +13,28 @@ function quick_view_issue_click(event) {
 }
 
 function quick_view_issue_dblclick(event) {
-  var id = $(event.currentTarget).attr("id");
-  var m = /issue-(\d+)/.exec(id);
-  if (!m) return;
+  var current_target = $(event.currentTarget);
+  var issue_id = null;
 
-  var issue_id = m[1];
+  var child_a = current_target.children("a.issue.parent");
+  if (child_a.length == 1) {
+     var m = /\/issues\/(\d+)$/.exec(child_a.attr("href"));
+     if (m) issue_id = m[1];
+
+  } else {
+     var relation = current_target.children("td.subject").children("a.issue");
+     if ( relation.length == 1 ) {
+       var m = /\/issues\/(\d+)$/.exec(relation.attr("href"));
+       if (m) issue_id = m[1];
+
+     } else {
+       var id = current_target.attr("id");
+       var m = /issue-(\d+)/.exec(id);
+       if (m) issue_id = m[1];
+     }
+  }
+  if (!issue_id) return;
+
   quick_view_show_dialog(issue_id);
 }
 
@@ -62,6 +79,7 @@ function quick_view_dialog_open(dialog_html) {
      show: {effect:"clip", easing:"easeInQuad"},
      hide: {effect:"clip", easing:"easeOutQuad"},
      buttons: {
+        "details" : quick_view_dialog_details,
         "close" : quick_view_dialog_cancel
      },
      close: quick_view_dialog_close
@@ -75,6 +93,18 @@ function quick_view_dialog_close(){
 function quick_view_dialog_cancel(){
   $(this).dialog("close");
 }
+
+function quick_view_dialog_get_issue_id(dialog){
+  var issue_id = dialog.attr("data-issue");
+  return issue_id;
+}
+
+function quick_view_dialog_details(){
+  var this_element = $(this);
+  var issue_id = quick_view_dialog_get_issue_id(this_element);
+  location.href='<%= issue_path(0) %>'.replace(/0$/, issue_id);
+}
+
 //]]>
 </script>
 
