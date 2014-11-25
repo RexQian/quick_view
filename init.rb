@@ -7,5 +7,5 @@ Redmine::Plugin.register :quick_view do
   name 'Quick View plugin'
   author 'Akira Saito'
   description 'This plugin provides ability to view a details of the issue at the issues page.'
-  version '0.0.4'
+  version '0.0.5'
 end
