@@ -23,6 +23,7 @@
 %>
   <div id="<%= dialog_html_id %>" class="quick_view_dialog" style="background-color: white;" title="<%= dialog_title %>" data-issue="<%= issue.id.to_s %>">
      <div class="issue">
+        <%= avatar(@issue.author, :size => "50") %>
         <div class="subject">
         <%= render_issue_subject_with_tree(issue) %>
         </div>
