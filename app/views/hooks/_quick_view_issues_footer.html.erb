@@ -80,6 +80,7 @@ function quick_view_dialog_open(dialog_html) {
      hide: {effect:"clip", easing:"easeOutQuad"},
      buttons: {
         "details" : quick_view_dialog_details,
+        "edit" : quick_view_dialog_edit,
         "close" : quick_view_dialog_cancel
      },
      close: quick_view_dialog_close
@@ -103,6 +104,12 @@ function quick_view_dialog_details(){
   var this_element = $(this);
   var issue_id = quick_view_dialog_get_issue_id(this_element);
   location.href='<%= issue_path(0) %>'.replace(/0$/, issue_id);
+}
+
+function quick_view_dialog_edit(){
+  var this_element = $(this);
+  var issue_id = quick_view_dialog_get_issue_id(this_element);
+  location.href='<%= edit_issue_path(0) %>'.replace(/0\/edit/, issue_id+'/edit');
 }
 
 //]]>
