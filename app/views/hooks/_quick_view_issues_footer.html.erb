@@ -7,30 +7,37 @@ var quick_view_click_event_object = null;
 
 $("tr.issue").click(quick_view_issue_click);
 $("tr.issue").dblclick(quick_view_issue_dblclick);
-$(".wt_iss_link").tooltip();
-$(".wt_iss_link").mouseenter(function(){
-   var link = $(this);
-   if (link.hasClass("has_tooltip")) return;
 
-   var issue_id = link.data("issue");
-   var url = "<%= issue_path(0) %>".replace(/0$/, link.data("issue")) + ".json";
-   $.ajax( { url: url, dataType: 'json', success: function (json){
-     var title="";
-     title += "Project: " + json.issue.project.name + "<br>";
-     title += "Assignee: " + json.issue.assigned_to.name + "<br>";
-     if (json.issue.due_date){
-       title += "Due date: " + /(....-..-..)/.exec(json.issue.due_date)[1]+"<br>";
-     } else {
-       title += "Due date: <br>";
-     }
-     title += "Spent time: " + json.issue.spent_hours + " hours<br>";
-     title += "<hr>";
-     title += "<span style='font-size:0.75em'>Updated on: " + /(....-..-..)/.exec(json.issue.updated_on)[1]+"</span><br>";
-     link.attr("title", title);
-     link.addClass("has_tooltip");
-     link.tooltip("open");
-   }});
-});
+quick_view_work_time_extension_init();
+
+function quick_view_work_time_extension_init(){
+  $(".wt_iss_link").tooltip();
+  $(".wt_iss_link").mouseenter(function(){
+     var link = $(this);
+     if (link.hasClass("has_tooltip")) return;
+  
+     var issue_id = link.data("issue");
+     var url = "<%= issue_path(0) %>".replace(/0$/, link.data("issue")) + ".json";
+     $.ajax( { url: url, dataType: 'json', success: function (json){
+       var title="";
+       title += "Project: " + json.issue.project.name + "<br>";
+       title += "Assignee: " + json.issue.assigned_to.name + "<br>";
+       if (json.issue.due_date){
+         title += "Due date: " + /(....-..-..)/.exec(json.issue.due_date)[1]+"<br>";
+       } else {
+         title += "Due date: <br>";
+       }
+       title += "Spent time: " + json.issue.spent_hours + " hours<br>";
+       title += "<hr>";
+       title += "<span style='font-size:0.75em'>Updated on: " + /(....-..-..)/.exec(json.issue.updated_on)[1]+"</span><br>";
+       link.attr("title", title);
+       link.addClass("has_tooltip");
+       link.tooltip("open");
+     }});
+  });
+  $(".wt_add_ticket_block > form").submit(quick_view_work_time_extension_init);
+}
+
 $(".wt_done_ratio").each(function(){
    var link = $(this);
    var issue_id = link.data("issue");
