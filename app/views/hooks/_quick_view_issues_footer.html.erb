@@ -12,9 +12,12 @@ quick_view_work_time_extension_init();
 $(document).ajaxComplete(quick_view_work_time_extension_init);
 
 function quick_view_work_time_extension_init(){
-  $(".wt_iss_link").each(function(){
+  var links = $(".wt_iss_link");
+  links.each(function(){
      var link = $(this);
-     if (link.hasClass("has_quick_view_link")) return;
+     if (link.hasClass("has_quick_view_inited")) return;
+
+     link.tooltip();
 
      var insertTo = link.next(".wt_done_ratio");
      if (insertTo.length == 0) {
@@ -22,10 +25,10 @@ function quick_view_work_time_extension_init(){
      }
      var issue_id = link.data("issue");
      $("<a style='margin-left: 5px; font-size: 0.8em;' href='javascript: quick_view_show_dialog("+issue_id+");'>[view]</a>").insertAfter(insertTo);
-     link.addClass("has_quick_view_link");
+     link.addClass("has_quick_view_inited");
   });
-  $(".wt_iss_link").tooltip();
-  $(".wt_iss_link").mouseenter(function(){
+
+  links.mouseenter(function(){
      var link = $(this);
      if (link.hasClass("has_tooltip")) return;
   
