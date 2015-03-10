@@ -9,8 +9,21 @@ $("tr.issue").click(quick_view_issue_click);
 $("tr.issue").dblclick(quick_view_issue_dblclick);
 
 quick_view_work_time_extension_init();
+$(document).ajaxComplete(quick_view_work_time_extension_init);
 
 function quick_view_work_time_extension_init(){
+  $(".wt_iss_link").each(function(){
+     var link = $(this);
+     if (link.hasClass("has_quick_view_link")) return;
+
+     var insertTo = link.next(".wt_done_ratio");
+     if (insertTo.length == 0) {
+       insertTo = link;
+     }
+     var issue_id = link.data("issue");
+     $("<a style='margin-left: 5px; font-size: 0.8em;' href='javascript: quick_view_show_dialog("+issue_id+");'>[view]</a>").insertAfter(insertTo);
+     link.addClass("has_quick_view_link");
+  });
   $(".wt_iss_link").tooltip();
   $(".wt_iss_link").mouseenter(function(){
      var link = $(this);
@@ -21,7 +34,7 @@ function quick_view_work_time_extension_init(){
      $.ajax( { url: url, dataType: 'json', success: function (json){
        var title="";
        title += "Project: " + json.issue.project.name + "<br>";
-       title += "Assignee: " + json.issue.assigned_to.name + "<br>";
+       title += "Assignee: " + ((json.issue.assigned_to)?json.issue.assigned_to.name:"") + "<br>";
        if (json.issue.due_date){
          title += "Due date: " + /(....-..-..)/.exec(json.issue.due_date)[1]+"<br>";
        } else {
@@ -35,14 +48,8 @@ function quick_view_work_time_extension_init(){
        link.tooltip("open");
      }});
   });
-  $(".wt_add_ticket_block > form").submit(quick_view_work_time_extension_init);
 }
 
-$(".wt_done_ratio").each(function(){
-   var link = $(this);
-   var issue_id = link.data("issue");
-   $("<a style='margin-left: 5px; font-size: 0.8em;' href='javascript: quick_view_show_dialog("+issue_id+");'>[view]</a>").insertAfter(link);
-});
 
 function quick_view_issue_click(event) {
    quick_view_click_event_object = event;
