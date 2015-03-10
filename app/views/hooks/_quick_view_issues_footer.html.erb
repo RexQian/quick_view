@@ -24,7 +24,7 @@ function quick_view_work_time_extension_init(){
        insertTo = link;
      }
      var issue_id = link.data("issue");
-     $("<a style='margin-left: 5px; font-size: 0.8em;' href='javascript: quick_view_show_dialog("+issue_id+");'>[view]</a>").insertAfter(insertTo);
+     $("<a style='margin-left: 5px;' href='javascript: quick_view_show_dialog("+issue_id+");'><img src='<%= image_path("external.png") %>'></img></a>").insertAfter(insertTo);
      link.addClass("has_quick_view_inited");
   });
 
