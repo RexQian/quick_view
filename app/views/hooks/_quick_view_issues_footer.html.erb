@@ -1,4 +1,5 @@
 <div id="quick_view_dialogs"></div>
+<div id="quick_view_tooltip" style="background-color: white; border: solid 1px gray;"></div>
 
 <script>
 //<![CDATA[
@@ -15,39 +16,27 @@ function quick_view_work_time_extension_init(){
   var links = $(".wt_iss_link");
   links.each(function(){
      var link = $(this);
-     if (link.hasClass("has_quick_view_inited")) return;
-
-     link.tooltip();
+     if (link.hasClass("has_quick_view_anchor")) return;
 
      var insertTo = link.next(".wt_done_ratio");
      if (insertTo.length == 0) {
        insertTo = link;
      }
      var issue_id = link.data("issue");
-     $("<a style='margin-left: 5px;' href='javascript: quick_view_show_dialog("+issue_id+");'><img src='<%= image_path("external.png") %>'></img></a>").insertAfter(insertTo);
-     link.addClass("has_quick_view_inited");
+     var anchor_html="<a style='margin-left: 5px;' href='javascript: quick_view_show_dialog("+issue_id+");'><img src='<%= image_path("external.png") %>'></img></a>";
+     $(anchor_html).insertAfter(insertTo);
+     link.addClass("has_quick_view_anchor");
   });
 
-  links.mouseenter(function(){
+  links.mouseover(function(){
      var link = $(this);
      if (link.hasClass("has_tooltip")) return;
   
      var issue_id = link.data("issue");
-     var url = "<%= issue_path(0) %>".replace(/0$/, link.data("issue")) + ".json";
-     $.ajax( { url: url, dataType: 'json', success: function (json){
-       var title="";
-       title += "Project: " + json.issue.project.name + "<br>";
-       title += "Assignee: " + ((json.issue.assigned_to)?json.issue.assigned_to.name:"") + "<br>";
-       if (json.issue.due_date){
-         title += "Due date: " + /(....-..-..)/.exec(json.issue.due_date)[1]+"<br>";
-       } else {
-         title += "Due date: <br>";
-       }
-       title += "Spent time: " + json.issue.spent_hours + " hours<br>";
-       title += "<hr>";
-       title += "<span style='font-size:0.75em'>Updated on: " + /(....-..-..)/.exec(json.issue.updated_on)[1]+"</span><br>";
-       link.attr("title", title);
+     var url = "<%= quick_view_worktime_issue_path(0) %>".replace(/0$/, link.data("issue"));
+     $.ajax( { url: url, dataType: 'html', success: function (html){
        link.addClass("has_tooltip");
+       link.tooltip({tooltipClass:"quick_view_tooltip", track: true, create:function(){link.attr("title",html);}});
        link.tooltip("open");
      }});
   });
