@@ -1,0 +1,19 @@
+<table>
+	<tr>
+		<th>WorkTime Extension enabled:</th>
+    <td>
+      <input type="checkbox" id="settings_worktime_ext_enabled" name="settings[worktime_ext_enabled]" <%= settings['worktime_ext_enabled'] ? "checked" : "" %>></input>
+    </td>
+    <td>
+    </td>
+	</tr>
+	<tr>
+    <th>WorkTime Extension(tooltip) enabled:</th>
+    <td>
+      <input type="checkbox" id="settings_worktime_ext_tooltip_enabled" name="settings[worktime_ext_tooltip_enabled]" <%= settings['worktime_ext_tooltip_enabled'] ? "checked" : "" %>></input>
+    </td>
+    <td>
+      Note: there is a possibility that the server load is increase.
+    </td>
+  </tr>
+</table>
