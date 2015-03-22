@@ -8,56 +8,6 @@ var quick_view_click_event_object = null;
 $("tr.issue").click(quick_view_issue_click);
 $("tr.issue").dblclick(quick_view_issue_dblclick);
 
-<% if Setting.plugin_quick_view['worktime_ext_enabled'] %>
-if ($("body").hasClass("controller-work_time")) {
-  quick_view_work_time_extension_init();
-  $(document).ajaxComplete(quick_view_work_time_extension_init);
-
-  <% if Setting.plugin_quick_view['worktime_ext_tooltip_enabled'] %>
-  quick_view_work_time_extension_tooltip_init();
-  $(document).ajaxComplete(quick_view_work_time_extension_tooltip_init);
-  <% end %>
-}
-
-function quick_view_work_time_extension_init() {
-  var links = $(".wt_iss_link");
-  links.each(function(){
-     var link = $(this);
-     if (link.hasClass("has_quick_view_anchor")) return;
-
-     var insertTo = link.next(".wt_done_ratio");
-     if (insertTo.length == 0) {
-       insertTo = link;
-     }
-     var issue_id = link.data("issue");
-     var anchor_html="<a style='margin-left: 5px;' href='javascript: quick_view_show_dialog("+issue_id+");'><img src='<%= image_path("external.png") %>'></img></a>";
-     $(anchor_html).insertAfter(insertTo);
-     link.addClass("has_quick_view_anchor");
-  });
-}
-
-function quick_view_work_time_extension_tooltip_init() {
-  var links = $(".wt_iss_link");
-  links.each(function(){
-     var link = $(this);
-     if (link.hasClass("has_tooltip")) return;
-
-     link.addClass("has_tooltip"); //need before ajax call.
-     link.mouseenter(function() { 
-       if (link.hasClass("has_tooltip_content")) return;
-
-       var issue_id = link.data("issue");
-       var url = "<%= quick_view_worktime_issue_path(0) %>".replace(/0$/, link.data("issue"));
-       $.ajax( { url: url, dataType: 'html', success: function (html){
-         link.addClass("has_tooltip_content"); //mark of tooltip content created.
-         link.tooltip({tooltipClass:"quick_view_tooltip", track: true, create:function(){link.attr("title",html);}});
-         link.tooltip("open");
-       }});
-     });
-  });
-}
-<% end %>
-
 function quick_view_issue_click(event) {
    quick_view_click_event_object = event;
 }
