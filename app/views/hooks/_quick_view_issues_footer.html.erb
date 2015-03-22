@@ -1,5 +1,4 @@
 <div id="quick_view_dialogs"></div>
-<div id="quick_view_tooltip" style="background-color: white; border: solid 1px gray;"></div>
 
 <script>
 //<![CDATA[
@@ -12,13 +11,15 @@ $("tr.issue").dblclick(quick_view_issue_dblclick);
 <% if Setting.plugin_quick_view['worktime_ext_enabled'] %>
 if ($("body").hasClass("controller-work_time")) {
   quick_view_work_time_extension_init();
+  $(document).ajaxComplete(quick_view_work_time_extension_init);
 
   <% if Setting.plugin_quick_view['worktime_ext_tooltip_enabled'] %>
   quick_view_work_time_extension_tooltip_init();
+  $(document).ajaxComplete(quick_view_work_time_extension_tooltip_init);
   <% end %>
 }
 
-function quick_view_work_time_extension_init(){
+function quick_view_work_time_extension_init() {
   var links = $(".wt_iss_link");
   links.each(function(){
      var link = $(this);
@@ -33,24 +34,27 @@ function quick_view_work_time_extension_init(){
      $(anchor_html).insertAfter(insertTo);
      link.addClass("has_quick_view_anchor");
   });
-  $(document).ajaxComplete(quick_view_work_time_extension_init);
 }
 
 function quick_view_work_time_extension_tooltip_init() {
   var links = $(".wt_iss_link");
-  links.mouseover(function(){
+  links.each(function(){
      var link = $(this);
      if (link.hasClass("has_tooltip")) return;
-  
-     var issue_id = link.data("issue");
-     var url = "<%= quick_view_worktime_issue_path(0) %>".replace(/0$/, link.data("issue"));
-     $.ajax( { url: url, dataType: 'html', success: function (html){
-       link.addClass("has_tooltip");
-       link.tooltip({tooltipClass:"quick_view_tooltip", track: true, create:function(){link.attr("title",html);}});
-       link.tooltip("open");
-     }});
+
+     link.addClass("has_tooltip"); //need before ajax call.
+     link.mouseenter(function() { 
+       if (link.hasClass("has_tooltip_content")) return;
+
+       var issue_id = link.data("issue");
+       var url = "<%= quick_view_worktime_issue_path(0) %>".replace(/0$/, link.data("issue"));
+       $.ajax( { url: url, dataType: 'html', success: function (html){
+         link.addClass("has_tooltip_content"); //mark of tooltip content created.
+         link.tooltip({tooltipClass:"quick_view_tooltip", track: true, create:function(){link.attr("title",html);}});
+         link.tooltip("open");
+       }});
+     });
   });
-  $(document).ajaxComplete(quick_view_work_time_extension_tooltip_init);
 }
 <% end %>
 
