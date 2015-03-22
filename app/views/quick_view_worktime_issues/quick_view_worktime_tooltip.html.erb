@@ -20,6 +20,7 @@
         <table class="quick_view_tooltip_attributes">
           <tr><th class="status"><%=l(:field_status) %></th><td class="status" ><%= h(issue.status.name)%></td></tr>
           <tr><th class="priority"><%=l(:field_priority) %></th><td class="priority"><%= h(issue.priority.name)%></td></tr>
+          <tr><th class="fixed-version"><%=l(:field_fixed_version) %></th><td class="fixed-version"><%= issue.fixed_version ? link_to_version(issue.fixed_version) : "-" %></td></tr>
           <tr><th class="assigned-to"><%=l(:field_assigned_to) %></th><td class="assigned_to"><%= avatar(issue.assigned_to, :size => "14").to_s.html_safe + (issue.assigned_to ? link_to_user(issue.assigned_to) : "-") %></td></tr>
           <tr><th class="start-date"><%=l(:field_start_date) %></th><td class="start-date"><%= format_date(issue.start_date)%></td></tr>
           <tr><th class="due-date"><%=l(:field_due_date) %></th><td class="due-date"><%= format_date(issue.due_date)%></td></tr>
