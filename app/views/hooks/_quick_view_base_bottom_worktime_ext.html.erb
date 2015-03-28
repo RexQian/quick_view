@@ -1,17 +1,28 @@
+<%
+  logger.info "setting: " + Setting.plugin_quick_view['worktime_ext_dialog_anchor_enabled']
+
+  worktime_ext_dialog_anchor_enabled = Setting.plugin_quick_view['worktime_ext_dialog_anchor_enabled']
+  worktime_ext_dialog_anchor_enabled = (worktime_ext_dialog_anchor_enabled == "on")
+  worktime_ext_tooltip_enabled = Setting.plugin_quick_view['worktime_ext_tooltip_enabled']
+  worktime_ext_tooltip_enabled = (worktime_ext_tooltip_enabled == "on")
+  worktime_ext_enabled = worktime_ext_dialog_anchor_enabled | worktime_ext_tooltip_enabled
+%>
+<% if worktime_ext_enabled %>
 <script>
 //<![CDATA[
-<% if Setting.plugin_quick_view['worktime_ext_enabled'] %>
 if ($("body").hasClass("controller-work_time")) {
-  quick_view_work_time_extension_init();
-  $(document).ajaxComplete(quick_view_work_time_extension_init);
+  <% if worktime_ext_dialog_anchor_enabled %>
+  quick_view_work_time_extension_dialog_anchor_init();
+  $(document).ajaxComplete(quick_view_work_time_extension_dialog_anchor_init);
+  <% end %>
 
-  <% if Setting.plugin_quick_view['worktime_ext_tooltip_enabled'] %>
+  <% if worktime_ext_tooltip_enabled %>
   quick_view_work_time_extension_tooltip_init();
   $(document).ajaxComplete(quick_view_work_time_extension_tooltip_init);
   <% end %>
 }
 
-function quick_view_work_time_extension_init() {
+function quick_view_work_time_extension_dialog_anchor_init() {
   var links = $(".wt_iss_link");
   links.each(function(){
      var link = $(this);
@@ -36,7 +47,6 @@ function quick_view_work_time_extension_tooltip_init() {
 function quick_view_work_time_extension_issue_id_parser(link) {
   return link.data("issue");
 }
-<% end %>
 //]]>
 </script>
-
+<% end %>

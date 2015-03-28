@@ -1,8 +1,8 @@
 <table>
 	<tr>
-		<th>WorkTime Extension enabled:</th>
+		<th>WorkTime Extension(dialog anchor) enabled:</th>
     <td>
-      <input type="checkbox" id="settings_worktime_ext_enabled" name="settings[worktime_ext_enabled]" <%= settings['worktime_ext_enabled'] ? "checked" : "" %>></input>
+      <input type="checkbox" id="settings_worktime_ext_dialog_anchor_enabled" name="settings[worktime_ext_dialog_anchor_enabled]" <%= settings['worktime_ext_dialog_anchor_enabled'] == "on" ? "checked" : "" %>></input>
     </td>
     <td>
     </td>
@@ -10,10 +10,10 @@
 	<tr>
     <th>WorkTime Extension(tooltip) enabled:</th>
     <td>
-      <input type="checkbox" id="settings_worktime_ext_tooltip_enabled" name="settings[worktime_ext_tooltip_enabled]" <%= settings['worktime_ext_tooltip_enabled'] ? "checked" : "" %>></input>
+      <input type="checkbox" id="settings_worktime_ext_tooltip_enabled" name="settings[worktime_ext_tooltip_enabled]" <%= settings['worktime_ext_tooltip_enabled']  == "on" ? "checked" : "" %>></input>
     </td>
-    <td>
-      Note: there is a possibility that the server load is increase.
+    <td style="color: red;">
+      <%= l(:server_load_increase) %>
     </td>
   </tr>
 </table>

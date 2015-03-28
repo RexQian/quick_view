@@ -9,8 +9,8 @@ Redmine::Plugin.register :quick_view do
   description 'This plugin provides ability to view a details of the issue at the issues page.'
   version '0.0.6'
 
-  settings :default => {'issue_tooltip_enabled'=>true,
-                        'worktime_ext_enabled'=>true,
-                        'worktime_ext_tooltip_enabled'=>true}, 
+  settings :default => {'issue_tooltip_enabled'=>'on',
+                        'worktime_ext_dialog_anchor_enabled'=>'on',
+                        'worktime_ext_tooltip_enabled'=>'on'}, 
            :partial => 'quick_view_issues/settings'
 end
