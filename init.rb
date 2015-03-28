@@ -11,6 +11,6 @@ Redmine::Plugin.register :quick_view do
 
   settings :default => {'issue_tooltip_enabled'=>true,
                         'worktime_ext_enabled'=>true,
-                        'worktime_ext_tooltip_enabled'=>false}, 
+                        'worktime_ext_tooltip_enabled'=>true}, 
            :partial => 'quick_view_issues/settings'
 end

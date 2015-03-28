@@ -1,10 +1,20 @@
 class QuickViewIssuesController < ApplicationController
-  before_filter :find_issue, :find_project_from_association, :only => [:show]
+  before_filter :find_issue, :find_project_from_association, :only => [:show, :portray]
 
   def show
     respond_to do |format|
       format.html {
         render :template => 'quick_view_issues/quick_view_issue_dialog',
+               :layout => false,
+               :issue => @issue
+      }
+    end
+  end
+
+  def portray
+    respond_to do |format|
+      format.html {
+        render :template => 'quick_view_issues/quick_view_portrait',
                :layout => false,
                :issue => @issue
       }

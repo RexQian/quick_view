@@ -1,0 +1,55 @@
+<script>
+//<![CDATA[
+var mouse_stay_issue = null;
+function quick_view_tooltip_init(elements, issue_id_parser) {
+  elements.each(function(){
+     var link = $(this);
+     if (link.hasClass("has_quick_view_mouse_event")) return;
+
+     var issue_id = issue_id_parser(link);
+     if (!issue_id) return;
+
+     link.addClass("has_quick_view_mouse_event");
+     link.data("quick_view_issue", issue_id);
+     link.mouseenter( quick_view_tooltip_activate_if_mouse_stay_begin );
+     link.mouseleave( quick_view_tooltip_activate_if_mouse_stay_cancel );
+  });
+}
+
+function quick_view_tooltip_activate_if_mouse_stay_begin() {
+   var link = $(this);
+   mouse_stay_issue = link.data("quick_view_issue");
+   setTimeout(function() {quick_view_tooltip_activate_if_mouse_stay(link)}, 1000);
+}
+
+function quick_view_tooltip_activate_if_mouse_stay_cancel() {
+   var link = $(this);
+   mouse_stay_issue = null;
+}
+
+function quick_view_tooltip_activate_if_mouse_stay(link) {
+  var issue_id = link.data("quick_view_issue");
+  if (mouse_stay_issue != issue_id) return;
+
+  if (!link.hasClass("has_quick_view_portrait")) {
+    var url = "<%= portray_quick_view_issue_path(0) %>".replace(/0\/portray$/, issue_id + "/portray");
+    link.tooltip({
+      tooltipClass:"quick_view_portrait",
+      track:       true,
+      items:       "[class]",
+      content:     "<div class='quick_view_portrait_loading'><img src='<%= image_path("loading.gif")%>'></img>LOADING</div>"
+      });
+
+    // repeat ajax request if bind to the open event of the tooltip.
+    $.ajax({ url: url, dataType: 'html', global: false})
+      .done(function (html){
+        link.addClass("has_quick_view_portrait"); //mark of portrait created.
+        link.tooltip("option", "content", html);
+      });
+  }
+  link.tooltip("open");
+}
+
+//]]>
+</script>
+

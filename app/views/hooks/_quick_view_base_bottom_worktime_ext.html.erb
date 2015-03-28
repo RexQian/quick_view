@@ -30,23 +30,11 @@ function quick_view_work_time_extension_init() {
 
 function quick_view_work_time_extension_tooltip_init() {
   var links = $(".wt_iss_link");
-  links.each(function(){
-     var link = $(this);
-     if (link.hasClass("has_tooltip")) return;
+  quick_view_tooltip_init(links, quick_view_work_time_extension_issue_id_parser);
+}
 
-     link.addClass("has_tooltip"); //need before ajax call.
-     link.mouseenter(function() { 
-       if (link.hasClass("has_tooltip_content")) return;
-
-       var issue_id = link.data("issue");
-       var url = "<%= quick_view_worktime_issue_path(0) %>".replace(/0$/, link.data("issue"));
-       $.ajax( { url: url, dataType: 'html', success: function (html){
-         link.addClass("has_tooltip_content"); //mark of tooltip content created.
-         link.tooltip({tooltipClass:"quick_view_tooltip", track: true, create:function(){link.attr("title",html);}});
-         link.tooltip("open");
-       }});
-     });
-  });
+function quick_view_work_time_extension_issue_id_parser(link) {
+  return link.data("issue");
 }
 <% end %>
 //]]>
