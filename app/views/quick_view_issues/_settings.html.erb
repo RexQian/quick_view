@@ -1,5 +1,13 @@
 <table>
 	<tr>
+		<th>Issue dialog size:</th>
+    <td>
+    <input type="size" id="settings_issue_dialog_size" name="settings[issue_dialog_size]" value="<%= settings['issue_dialog_size'] %>"></input>
+    </td>
+    <td>
+    </td>
+	</tr>
+	<tr>
 		<th>Issue tooltip enabled:</th>
     <td>
       <input type="checkbox" id="settings_issue_tooltip_enabled" name="settings[issue_tooltip_enabled]" <%= settings['issue_tooltip_enabled'] == "on" ? "checked" : "" %>></input>

@@ -1,5 +1,13 @@
+<%
+  issue_dialog_size = Setting.plugin_quick_view['issue_dialog_size'].split(",")
+  issue_dialog_size[0] = 640 if issue_dialog_size.length != 2 || !issue_dialog_size[0].match(/\d+/)
+  issue_dialog_size[1] = 600 if issue_dialog_size.length != 2 || !issue_dialog_size[1].match(/\d+/)
+  issue_dialog_size[0] = issue_dialog_size[0].to_i
+  issue_dialog_size[1] = issue_dialog_size[1].to_i
+  issue_dialog_size[0] = 640 unless (400 ... 2048).include?(issue_dialog_size[0])
+  issue_dialog_size[1] = 600 unless (300 ... 2048).include?(issue_dialog_size[1])
+%>
 <div id="quick_view_dialogs"></div>
-
 <script>
 //<![CDATA[
 var quick_view_dialog_open_queue = 0;
@@ -116,8 +124,8 @@ function quick_view_dialog_open(dialog_html) {
   $('#'+dialog_id).dialog({
      modal: false,
      closeOnEscape: false,
-     width: 640,
-     height: 600,
+     width: <%= issue_dialog_size[0] %>,
+     height: <%= issue_dialog_size[1] %>,
      position: position,
      show: {effect:"clip", easing:"easeInQuad"},
      hide: {effect:"clip", easing:"easeOutQuad"},
