@@ -13,32 +13,60 @@
 var quick_view_dialog_open_queue = 0;
 var quick_view_click_event_object = null;
 
-if ($("body").hasClass("controller-issues") && $("body").hasClass("action-index")) {
-  $("tr.issue").click(quick_view_issue_click);
-  $("tr.issue").dblclick(quick_view_issue_dblclick);
-  <% if Setting.plugin_quick_view['issue_tooltip_enabled'] == "on" %>
-  quick_view_tooltip_init($("tr.issue > td.subject > a"), quick_view_href_issue_id_parser);
-  quick_view_tooltip_init($("tr.issue > td.id > a"), quick_view_href_issue_id_parser);
-  <% end %>
+quick_view_issue_dialog_init();
+$(document).ajaxComplete(quick_view_issue_dialog_init);
+
+function quick_view_issue_dialog_init() {
+  var body = $("body");
+  if (body.hasClass("controller-issues") && body.hasClass("action-index")) {
+    quick_view_issue_dialog_event_init($("tr.issue"));
+  }
+  
+  if (body.hasClass("controller-issues") && body.hasClass("action-show")) {
+    quick_view_issue_dialog_event_init($("tr.issue"));
+  }
+  
+  if (body.hasClass("controller-my")) {
+    quick_view_issue_dialog_event_init($("tr.issue"));
+    
+  }
 }
 
-if ($("body").hasClass("controller-issues") && $("body").hasClass("action-show")) {
-  $("tr.issue").click(quick_view_issue_click);
-  $("tr.issue").dblclick(quick_view_issue_dblclick);
-  <% if Setting.plugin_quick_view['issue_tooltip_enabled'] == "on" %>
-  quick_view_tooltip_init($("tr.issue > td.subject > a"), quick_view_href_issue_id_parser);
-  quick_view_tooltip_init($("a.issue"), quick_view_href_issue_id_parser);
-  <% end %>
+function quick_view_issue_dialog_event_init(elements) {
+  elements.each( function () {
+    var element = $(this);
+    if (element.hasClass("has_quick_view_issue_dialog_handler")) return;
+
+    element.addClass("has_quick_view_issue_dialog_handler");
+    element.click(quick_view_issue_click);
+    element.dblclick(quick_view_issue_dblclick);
+  });
 }
 
-if ($("body").hasClass("controller-my")) {
-  $("tr.issue").click(quick_view_issue_click);
-  $("tr.issue").dblclick(quick_view_issue_dblclick);
-  <% if Setting.plugin_quick_view['issue_tooltip_enabled'] == "on" %>
-  quick_view_tooltip_init($("tr.issue > td.subject > a"), quick_view_href_issue_id_parser);
-  quick_view_tooltip_init($("tr.issue > td.id > a"), quick_view_href_issue_id_parser);
-  <% end %>
+<% if Setting.plugin_quick_view['issue_tooltip_enabled'] == "on" %>
+quick_view_issue_tooltip_init();
+$(document).ajaxComplete(quick_view_issue_tooltip_init);
+
+function quick_view_issue_tooltip_init() {
+  var body = $("body");
+  if (body.hasClass("controller-issues") && body.hasClass("action-index")) {
+    quick_view_tooltip_init($("tr.issue > td.subject > a"), quick_view_href_issue_id_parser);
+    quick_view_tooltip_init($("tr.issue > td.id > a"), quick_view_href_issue_id_parser);
+    quick_view_tooltip_init($("a.issue"), quick_view_href_issue_id_parser); // for parent link in the issue dialog
+  }
+  
+  if (body.hasClass("controller-issues") && body.hasClass("action-show")) {
+    quick_view_tooltip_init($("tr.issue > td.subject > a"), quick_view_href_issue_id_parser);
+    quick_view_tooltip_init($("a.issue"), quick_view_href_issue_id_parser);
+  }
+  
+  if (body.hasClass("controller-my")) {
+    quick_view_tooltip_init($("tr.issue > td.subject > a"), quick_view_href_issue_id_parser);
+    quick_view_tooltip_init($("tr.issue > td.id > a"), quick_view_href_issue_id_parser);
+    quick_view_tooltip_init($("a.issue"), quick_view_href_issue_id_parser); // for parent link in the issue dialog
+  }
 }
+<% end %>
 
 function quick_view_href_issue_id_parser(current_target) {
   var issue_id = null;
