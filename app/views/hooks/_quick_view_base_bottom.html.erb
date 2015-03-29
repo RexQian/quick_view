@@ -1,7 +1,7 @@
 <%
   issue_dialog_size = Setting.plugin_quick_view['issue_dialog_size'].split(",")
-  issue_dialog_size[0] = 640 if issue_dialog_size.length != 2 || !issue_dialog_size[0].match(/\d+/)
-  issue_dialog_size[1] = 600 if issue_dialog_size.length != 2 || !issue_dialog_size[1].match(/\d+/)
+  issue_dialog_size[0] = 640 if issue_dialog_size.length != 2 || !issue_dialog_size[0].match(/\d{3,4}/)
+  issue_dialog_size[1] = 600 if issue_dialog_size.length != 2 || !issue_dialog_size[1].match(/\d{3,4}/)
   issue_dialog_size[0] = issue_dialog_size[0].to_i
   issue_dialog_size[1] = issue_dialog_size[1].to_i
   issue_dialog_size[0] = 640 unless (400 ... 2048).include?(issue_dialog_size[0])
