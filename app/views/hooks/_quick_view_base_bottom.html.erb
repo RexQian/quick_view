@@ -8,22 +8,28 @@ var quick_view_click_event_object = null;
 if ($("body").hasClass("controller-issues") && $("body").hasClass("action-index")) {
   $("tr.issue").click(quick_view_issue_click);
   $("tr.issue").dblclick(quick_view_issue_dblclick);
+  <% if Setting.plugin_quick_view['issue_tooltip_enabled'] == "on" %>
   quick_view_tooltip_init($("tr.issue > td.subject > a"), quick_view_href_issue_id_parser);
   quick_view_tooltip_init($("tr.issue > td.id > a"), quick_view_href_issue_id_parser);
+  <% end %>
 }
 
 if ($("body").hasClass("controller-issues") && $("body").hasClass("action-show")) {
   $("tr.issue").click(quick_view_issue_click);
   $("tr.issue").dblclick(quick_view_issue_dblclick);
+  <% if Setting.plugin_quick_view['issue_tooltip_enabled'] == "on" %>
   quick_view_tooltip_init($("tr.issue > td.subject > a"), quick_view_href_issue_id_parser);
   quick_view_tooltip_init($("a.issue"), quick_view_href_issue_id_parser);
+  <% end %>
 }
 
 if ($("body").hasClass("controller-my")) {
   $("tr.issue").click(quick_view_issue_click);
   $("tr.issue").dblclick(quick_view_issue_dblclick);
+  <% if Setting.plugin_quick_view['issue_tooltip_enabled'] == "on" %>
   quick_view_tooltip_init($("tr.issue > td.subject > a"), quick_view_href_issue_id_parser);
   quick_view_tooltip_init($("tr.issue > td.id > a"), quick_view_href_issue_id_parser);
+  <% end %>
 }
 
 function quick_view_href_issue_id_parser(current_target) {
