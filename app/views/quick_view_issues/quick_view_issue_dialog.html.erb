@@ -14,6 +14,11 @@
   project = @issue.project
   changesets = issue.changesets.visible.all
   journals = issue.journals.includes(:user, :details).reorder("#{Journal.table_name}.id ASC").all
+  if redmine_version() >= 30
+    journals = journals.to_a
+  else
+    journals = journals.all
+  end
   journals.each_with_index {|j,i| j.indice = i+1}
   journals.reject!(&:private_notes?) unless User.current.allowed_to?(:view_private_notes, project)
   journals.reverse! if User.current.wants_comments_in_reverse_order?
@@ -65,8 +70,7 @@
             end
           end
           if User.current.allowed_to?(:view_time_entries, project)
-            redmine_version = Redmine::VERSION::MAJOR * 10 + Redmine::VERSION::MINOR
-            if redmine_version < 26
+            if redmine_version() < 26
               rows.right l(:label_spent_time), (issue.total_spent_hours > 0 ? link_to(l_hours(issue.total_spent_hours), project_issue_time_entries_path(project, issue)) : "-"), :class => 'spent-time'
             else
               rows.right l(:label_spent_time), (issue.total_spent_hours > 0 ? link_to(l_hours(issue.total_spent_hours), issue_time_entries_path(issue)) : "-"), :class => 'spent-time'

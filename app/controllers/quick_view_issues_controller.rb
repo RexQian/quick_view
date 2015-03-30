@@ -3,6 +3,7 @@ class QuickViewIssuesController < ApplicationController
 
   def show
     @relations = @issue.relations.select {|r| r.other_issue(@issue) && r.other_issue(@issue).visible? }
+    @relation = IssueRelation.new
 
     respond_to do |format|
       format.html {
