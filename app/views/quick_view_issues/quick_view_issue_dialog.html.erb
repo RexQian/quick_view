@@ -13,7 +13,7 @@
   issue = @issue
   project = @issue.project
   changesets = issue.changesets.visible.all
-  journals = issue.journals.includes(:user, :details).reorder("#{Journal.table_name}.id ASC").all
+  journals = issue.journals.includes(:user, :details).reorder("#{Journal.table_name}.id ASC")
   if redmine_version() >= 30
     journals = journals.to_a
   else
