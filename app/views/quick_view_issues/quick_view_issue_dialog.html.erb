@@ -14,11 +14,7 @@
   project = @issue.project
   changesets = issue.changesets.visible.all
   journals = issue.journals.includes(:user, :details).reorder("#{Journal.table_name}.id ASC")
-  if redmine_version() >= 30
-    journals = journals.to_a
-  else
-    journals = journals.all
-  end
+  journals = journals.to_a
   journals.each_with_index {|j,i| j.indice = i+1}
   journals.reject!(&:private_notes?) unless User.current.allowed_to?(:view_private_notes, project)
   journals.reverse! if User.current.wants_comments_in_reverse_order?

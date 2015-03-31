@@ -1,3 +1,5 @@
+#coding: utf-8
+
 class QuickViewIssuesController < ApplicationController
   before_filter :find_issue, :find_project_from_association, :only => [:show, :portray]
 
