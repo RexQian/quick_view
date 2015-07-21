@@ -147,7 +147,8 @@ function quick_view_dialog_open(dialog_html) {
 
   quick_view_dialog_open_queue--;
   var adjust = (quick_view_dialog_open_queue * 30) + 'px';
-  var position = {my: "right-"+adjust+" center-"+adjust, of: quick_view_click_event_object};
+  var position_base = quick_view_click_event_object != null ? quick_view_click_event_object : window;
+  var position = {my: "right-"+adjust+" center-"+adjust, of: position_base };
 
   $('#'+dialog_id).dialog({
      modal: false,
