@@ -76,6 +76,7 @@
         end %>
 
         <%= render_custom_fields_rows(issue) %>
+        <%= call_hook(:view_issues_show_details_bottom, :issue => @issue) %>
         </table>
 
         <hr />
@@ -93,6 +94,8 @@
           <%= link_to_attachments issue, :thumbnails => true %>
           <% end %>
         </div>
+
+        <%= call_hook(:view_issues_show_description_bottom, :issue => @issue) %>
 
         <% if !@issue.leaf? || User.current.allowed_to?(:manage_subtasks, @project) %>
         <hr />
