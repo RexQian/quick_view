@@ -1,30 +1,30 @@
 <table>
-	<tr>
-		<th>Issue dialog size:</th>
+  <tr>
+    <th>Issue dialog size:</th>
     <td>
-    <input type="size" id="settings_issue_dialog_size" name="settings[issue_dialog_size]" value="<%= settings['issue_dialog_size'] %>"></input>
+      <input type="size" id="settings_issue_dialog_size" name="settings[issue_dialog_size]" value="<%= settings['issue_dialog_size'] %>"></input>
     </td>
     <td>
     </td>
-	</tr>
-	<tr>
-		<th>Issue tooltip enabled:</th>
+  </tr>
+  <tr>
+    <th>Issue tooltip enabled:</th>
     <td>
       <input type="checkbox" id="settings_issue_tooltip_enabled" name="settings[issue_tooltip_enabled]" <%= settings['issue_tooltip_enabled'] == "on" ? "checked" : "" %>></input>
     </td>
     <td style="color: red;">
       <%= l(:server_load_increase) %>
     </td>
-	</tr>
-	<tr>
-		<th>WorkTime Extension(dialog anchor) enabled:</th>
+  </tr>
+  <tr>
+    <th>WorkTime Extension(dialog anchor) enabled:</th>
     <td>
       <input type="checkbox" id="settings_worktime_ext_dialog_anchor_enabled" name="settings[worktime_ext_dialog_anchor_enabled]" <%= settings['worktime_ext_dialog_anchor_enabled'] == "on" ? "checked" : "" %>></input>
     </td>
     <td>
     </td>
-	</tr>
-	<tr>
+  </tr>
+  <tr>
     <th>WorkTime Extension(tooltip) enabled:</th>
     <td>
       <input type="checkbox" id="settings_worktime_ext_tooltip_enabled" name="settings[worktime_ext_tooltip_enabled]" <%= settings['worktime_ext_tooltip_enabled']  == "on" ? "checked" : "" %>></input>
