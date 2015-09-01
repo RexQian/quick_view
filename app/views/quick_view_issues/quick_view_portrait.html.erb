@@ -73,6 +73,12 @@
   </tr>
   <% end %>
   <% end %>
+  <% if desired_attributes.include? 'done_ratio' %>
+  <tr>
+    <th class="progress"><%=l(:field_done_ratio) %></th>
+    <td class="progress"><%= progress_bar(@issue.done_ratio, :width => '50px', :legend => "#{@issue.done_ratio}%")%></td>
+  </tr>
+  <% end %>
   <% if desired_attributes.include? 'estimated_hours' %>
   <% unless issue.disabled_core_fields.include?('estimated_hours') %>
   <%   unless issue.estimated_hours.nil? %>
@@ -92,6 +98,13 @@
   <% end %>
   <% end %>
 </table>
+<% if desired_attributes.include?('description') && @issue.description.present? %>
+<hr>
+<div class="wiki">
+<%= textilizable @issue, :description, :attachments => @issue.attachments %>
+</div>
+<% end %>
+
 <% if issue.created_on != issue.updated_on %>
 <hr>
 <%= l(:label_updated_time, time_tag(issue.updated_on)).html_safe %>.
