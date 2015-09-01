@@ -17,6 +17,18 @@
     </td>
   </tr>
   <tr>
+    <th>Tooltip attributes:</th>
+    <td>
+      <select id="settings_tooltip_attrs" name="settings[tooltip_attributes][]" multiple>
+        <%= options_for_select [:status, :priority, :category, :fixed_version, :assigned_to, :start_date, :due_date, :estimated_hours, :spent_time],
+              settings['tooltip_attributes'] %>
+      </select>
+    </td>
+    <td style="color: red;">
+      <%= l(:server_load_increase) %>
+    </td>
+  </tr>
+  <tr>
     <th>WorkTime Extension(dialog anchor) enabled:</th>
     <td>
       <input type="checkbox" id="settings_worktime_ext_dialog_anchor_enabled" name="settings[worktime_ext_dialog_anchor_enabled]" <%= settings['worktime_ext_dialog_anchor_enabled'] == "on" ? "checked" : "" %>></input>
