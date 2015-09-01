@@ -9,6 +9,8 @@
 
   issue = @issue
   project = @issue.project
+  desired_attributes = Setting.plugin_quick_view['tooltip_attributes']
+  logger.info "### QUICK VIEW ### " + desired_attributes.inspect
 %>
 <div>
   <%= avatar(@issue.author, :size => "50") %>
@@ -19,44 +21,59 @@
 </div>
 <hr style="clear: both;">
 <table class="quick_view_portrait_attributes">
+  <% if desired_attributes.include? 'status' %>
   <tr>
     <th class="status"><%=l(:field_status) %></th>
     <td class="status" ><%= h(issue.status.name)%></td>
   </tr>
+  <% end %>
+  <% if desired_attributes.include? 'priority' %>
   <tr>
     <th class="priority"><%=l(:field_priority) %></th>
     <td class="priority"><%= h(issue.priority.name)%></td>
   </tr>
+  <% end %>
+  <% if desired_attributes.include? 'category' %>
   <% unless issue.disabled_core_fields.include?('category_id') %>
   <tr>
     <th class="category"><%=l(:field_category) %></th>
     <td class="category"><%= h(issue.category ? issue.category.name : "-") %></td>
   </tr>
   <% end %>
+  <% end %>
+  <% if desired_attributes.include? 'fixed_version' %>
   <% unless issue.disabled_core_fields.include?('fixed_version_id') %>
   <tr>
     <th class="fixed-version"><%=l(:field_fixed_version) %></th>
     <td class="fixed-version"><%= issue.fixed_version ? issue.fixed_version.name : "-" %></td>
   </tr>
   <% end %>
+  <% end %>
+  <% if desired_attributes.include? 'assigned_to' %>
   <% unless issue.disabled_core_fields.include?('assigned_to_id') %>
   <tr>
     <th class="assigned-to"><%=l(:field_assigned_to) %></th>
     <td class="assigned-to"><%= avatar(issue.assigned_to, :size => "14").to_s.html_safe + (issue.assigned_to ? issue.assigned_to.name : "-") %></td>
   </tr>
   <% end %>
+  <% end %>
+  <% if desired_attributes.include? 'start_date' %>
   <% unless issue.disabled_core_fields.include?('start_date') %>
   <tr>
     <th class="start-date"><%=l(:field_start_date) %></th>
     <td class="start-date"><%= issue.start_date ? format_date(issue.start_date) : "-" %></td>
   </tr>
   <% end %>
+  <% end %>
+  <% if desired_attributes.include? 'due_date' %>
   <% unless issue.disabled_core_fields.include?('due_date') %>
   <tr>
     <th class="due-date"><%=l(:field_due_date) %></th>
     <td class="due-date"><%= issue.due_date ? format_date(issue.due_date) : "-" %></td>
   </tr>
   <% end %>
+  <% end %>
+  <% if desired_attributes.include? 'estimated_hours' %>
   <% unless issue.disabled_core_fields.include?('estimated_hours') %>
   <%   unless issue.estimated_hours.nil? %>
   <tr>
@@ -64,12 +81,15 @@
     <td class="estimated-hours"><%= format_date(issue.estimated_hours)%></td>
   </tr>
   <%   end %>
-  <% end%>
+  <% end %>
+  <% end %>
+  <% if desired_attributes.include? 'spent_time' %>
   <% if User.current.allowed_to?(:view_time_entries, project) %>
   <tr>
     <th class="spent-time"><%=l(:label_spent_time) %></th>
     <td class="spent-time"><%= (issue.total_spent_hours > 0 ? l_hours(issue.total_spent_hours) : "-") %></td>
   </tr>
+  <% end %>
   <% end %>
 </table>
 <% if issue.created_on != issue.updated_on %>
