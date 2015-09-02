@@ -76,7 +76,9 @@
         end %>
 
         <%= render_custom_fields_rows(issue) %>
+        <% unless Setting.plugin_quick_view['disable_call_hook'] %>
         <%= call_hook(:view_issues_show_details_bottom, :issue => @issue) %>
+        <% end %>
         </table>
 
         <hr />
@@ -95,7 +97,9 @@
           <% end %>
         </div>
 
+        <% unless Setting.plugin_quick_view['disable_call_hook'] %>
         <%= call_hook(:view_issues_show_description_bottom, :issue => @issue) %>
+        <% end %>
 
         <% if !@issue.leaf? || User.current.allowed_to?(:manage_subtasks, @project) %>
         <hr />
