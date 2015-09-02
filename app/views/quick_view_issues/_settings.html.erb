@@ -19,8 +19,8 @@
   <tr>
     <th>Tooltip attributes:</th>
     <td>
-      <select id="settings_tooltip_attrs" name="settings[tooltip_attributes][]" multiple>
-        <%= options_for_select [:status, :priority, :category, :fixed_version, :assigned_to, :start_date, :due_date, :done_ratio, :estimated_hours, :spent_time, :description],
+      <select id="settings_tooltip_attrs" name="settings[tooltip_attributes][]" multiple size="14">
+        <%= options_for_select [:avatar, :project, :subject, :status, :priority, :category, :fixed_version, :assigned_to, :start_date, :due_date, :done_ratio, :estimated_hours, :spent_time, :description],
               settings['tooltip_attributes'] %>
       </select>
     </td>

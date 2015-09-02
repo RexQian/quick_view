@@ -10,16 +10,33 @@
   issue = @issue
   project = @issue.project
   desired_attributes = Setting.plugin_quick_view['tooltip_attributes']
+  require_header = desired_attributes.any? do |attr|
+    ['avatar', 'project', 'subject'].include?(attr)
+  end
+  require_body = desired_attributes.any? do |attr|
+    ['status', 'priority' 'category', 'fixed_version', 'assigned_to', 'start_date', 'due_date', 'done_ratio', 'estimated_hours', 'spent_time'].include?(attr)
+  end
   logger.info "### QUICK VIEW ### " + desired_attributes.inspect
 %>
+<% if require_header %>
 <div>
+  <% if desired_attributes.include? 'avatar' %>
   <%= avatar(@issue.author, :size => "50") %>
+  <% end %>
+  <% if desired_attributes.include? 'project' %>
   <div>&lt;<%= project.name %>&gt;</div>
+  <% end %>
+  <% if desired_attributes.include? 'subject' %>
   <div class="subject">
     <%= render_issue_subject_with_tree(issue) %>
   </div>
+  <% end %>
 </div>
+<% end %>
+<% if require_header && require_body %>
 <hr style="clear: both;">
+<% end %>
+<% if require_body %>
 <table class="quick_view_portrait_attributes">
   <% if desired_attributes.include? 'status' %>
   <tr>
@@ -98,14 +115,17 @@
   <% end %>
   <% end %>
 </table>
+<% end %>
 <% if desired_attributes.include?('description') && @issue.description.present? %>
-<hr>
+<% if require_header || require_body %>
+<hr style="clear: both;">
+<% end %>
 <div class="wiki">
 <%= textilizable @issue, :description, :attachments => @issue.attachments %>
 </div>
 <% end %>
 
 <% if issue.created_on != issue.updated_on %>
-<hr>
+<hr style="clear: both;">
 <%= l(:label_updated_time, time_tag(issue.updated_on)).html_safe %>.
 <% end %>
