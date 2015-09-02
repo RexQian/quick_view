@@ -1,0 +1,7 @@
+# Italian strings go here for Rails i18n
+it:
+  label_quick_view: Quick View
+  project_module_quick_view: Quick View Plugin
+
+  button_quick_view: Quick View
+  server_load_increase: "Nota: abilitando questo parametro e' possibile che il carico del server aumenti."
