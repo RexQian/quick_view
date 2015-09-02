@@ -24,7 +24,7 @@
   <%= avatar(@issue.author, :size => "50") %>
   <% end %>
   <% if desired_attributes.include? 'project' %>
-  <div>&lt;<%= project.name %>&gt;</div>
+  <div class="project">&lt;<%= project.name %>&gt;</div>
   <% end %>
   <% if desired_attributes.include? 'subject' %>
   <div class="subject">
@@ -41,7 +41,7 @@
   <% if desired_attributes.include? 'status' %>
   <tr>
     <th class="status"><%=l(:field_status) %></th>
-    <td class="status" ><%= h(issue.status.name)%></td>
+    <td class="status"><%= h(issue.status.name)%></td>
   </tr>
   <% end %>
   <% if desired_attributes.include? 'priority' %>
