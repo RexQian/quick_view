@@ -31,7 +31,6 @@
   require_body = desired_attributes.any? do |attr|
     ['status', 'priority' 'category', 'target_version', 'assigned_to', 'start_date', 'due_date', 'done_ratio', 'estimated_hours', 'spent_time'].include?(attr)
   end
-  logger.info "### QUICK VIEW ### " + desired_attributes.inspect
 %>
 <% if require_header %>
 <div>
