@@ -115,7 +115,7 @@
   <%   unless issue.estimated_hours.nil? %>
   <tr>
     <th class="estimated-hours"><%=l(:field_estimated_hours) %></th>
-    <td class="estimated-hours"><%= format_date(issue.estimated_hours)%></td>
+    <td class="estimated-hours"><%= issue_estimated_hours_details(@issue) %></td>
   </tr>
   <%   end %>
   <% end %>
