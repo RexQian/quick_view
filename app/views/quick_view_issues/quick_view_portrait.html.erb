@@ -10,6 +10,21 @@
   issue = @issue
   project = @issue.project
   desired_attributes = Setting.plugin_quick_view['tooltip_attributes']
+  if desired_attributes.nil?
+    desired_attributes = [
+      'avatar',
+      'project',
+      'subject',
+      'status',
+      'priority',
+      'category',
+      'target_version',
+      'assigned_to',
+      'start_date',
+      'due_date',
+      'estimated_hours',
+      'spent_time']
+  end
   require_header = desired_attributes.any? do |attr|
     ['avatar', 'project', 'subject'].include?(attr)
   end
