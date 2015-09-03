@@ -11,7 +11,7 @@ Redmine::Plugin.register :quick_view do
 
   settings :default => {'issue_dialog_size'=>'640,600',
                         'issue_tooltip_enabled'=>'on',
-                        'tooltip_attributes'=>[ :avatar, :project, :subject, :status , :priority , :category , :fixed_version , :assigned_to , :start_date , :due_date , :estimated_hours , :spent_time],
+                        'tooltip_attributes'=>[ :avatar, :project, :subject, :status , :priority , :category , :target_version , :assigned_to , :start_date , :due_date , :estimated_hours , :spent_time],
                         'worktime_ext_dialog_anchor_enabled'=>'on',
                         'worktime_ext_tooltip_enabled'=>'on'}, 
            :partial => 'quick_view_issues/settings'

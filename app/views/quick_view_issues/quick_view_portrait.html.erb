@@ -14,7 +14,7 @@
     ['avatar', 'project', 'subject'].include?(attr)
   end
   require_body = desired_attributes.any? do |attr|
-    ['status', 'priority' 'category', 'fixed_version', 'assigned_to', 'start_date', 'due_date', 'done_ratio', 'estimated_hours', 'spent_time'].include?(attr)
+    ['status', 'priority' 'category', 'target_version', 'assigned_to', 'start_date', 'due_date', 'done_ratio', 'estimated_hours', 'spent_time'].include?(attr)
   end
   logger.info "### QUICK VIEW ### " + desired_attributes.inspect
 %>
@@ -58,7 +58,7 @@
   </tr>
   <% end %>
   <% end %>
-  <% if desired_attributes.include? 'fixed_version' %>
+  <% if desired_attributes.include? 'target_version' %>
   <% unless issue.disabled_core_fields.include?('fixed_version_id') %>
   <tr>
     <th class="fixed-version"><%=l(:field_fixed_version) %></th>
