@@ -35,6 +35,10 @@ function quick_view_issue_dialog_init() {
     quick_view_issue_dialog_event_init($("tr.hascontextmenu > td"));
   }
   
+  if (body.hasClass("controller-gantts")) {
+    quick_view_issue_dialog_event_init($("div.issue-subject"));
+    quick_view_issue_dialog_event_init($("div.tooltip"));
+  }
 }
 
 function quick_view_issue_dialog_event_init(elements) {
@@ -74,6 +78,10 @@ function quick_view_issue_tooltip_init() {
   if (body.hasClass("controller-versions")) {
     quick_view_tooltip_init($("a.issue"), quick_view_href_issue_id_parser); // for parent link in the issue dialog
   }
+
+  if (body.hasClass("controller-gantts")) {
+    quick_view_tooltip_init($("a.issue"), quick_view_href_issue_id_parser);
+  }
 }
 <% end %>
 
@@ -93,6 +101,18 @@ function quick_view_child_href_issue_id_parser(current_target) {
   var issue_id = null;
 
   var href = current_target.children("a.issue").attr("href");
+  if (href) {
+     var m = /\/issues\/(\d+)$/.exec(href);
+     if (m) issue_id = m[1];
+  }
+
+  return issue_id;
+}
+
+function quick_view_grandson_href_issue_id_parser(current_target) {
+  var issue_id = null;
+
+  var href = current_target.children().children("a.issue").attr("href");
   if (href) {
      var m = /\/issues\/(\d+)$/.exec(href);
      if (m) issue_id = m[1];
@@ -134,7 +154,10 @@ function quick_view_issue_dblclick(event) {
     issue_id = quick_view_child_subject_td_issue_id_parser(current_target);
     if (!issue_id) {
       issue_id = quick_view_child_href_issue_id_parser(current_target);
-      if (!issue_id) return;
+      if (!issue_id) {
+        issue_id = quick_view_grandson_href_issue_id_parser(current_target);
+        if(!issue_id) return;
+      }
     }
   }
 
