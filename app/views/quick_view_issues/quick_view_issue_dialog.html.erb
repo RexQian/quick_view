@@ -36,7 +36,12 @@
         <% end %>
         </p>
 
+        <% if redmine_version <= 31 %>
         <table class="attributes">
+        <% else %>
+        <div class="attributes">
+        <% end %>
+
         <%= issue_fields_rows do |rows|
           rows.left l(:field_status), h(issue.status.name), :class => 'status'
           rows.left l(:field_priority), h(issue.priority.name), :class => 'priority'
@@ -79,7 +84,12 @@
         <% unless Setting.plugin_quick_view['disable_call_hook'] %>
         <%= call_hook(:view_issues_show_details_bottom, :issue => @issue) %>
         <% end %>
+
+        <% if redmine_version() <= 31 %>
         </table>
+        <% else %>
+        </div>
+        <% end %>
 
         <hr />
          
