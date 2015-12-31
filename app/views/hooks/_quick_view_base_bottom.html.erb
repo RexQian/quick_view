@@ -215,6 +215,9 @@ function quick_view_dialog_open(dialog_html) {
      },
      close: quick_view_dialog_close
   });
+  $(".quick_view_dialog").click( function (e) {
+    e.stopPropagation();
+  });
 }
 
 function quick_view_dialog_close(){
