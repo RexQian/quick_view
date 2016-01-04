@@ -35,6 +35,7 @@ function quick_view_tooltip_activate_if_mouse_stay(link) {
     var url = "<%= portray_quick_view_issue_path(0) %>".replace(/0\/portray$/, issue_id + "/portray");
     link.tooltip({
       tooltipClass:"quick_view_portrait",
+      position:    { my: "left+30px top-80px", at: "right top+10px", collision: "flipfit" },
       track:       true,
       items:       "[class]",
       content:     "<div class='quick_view_portrait_loading'><img src='<%= image_path("loading.gif")%>'></img>LOADING</div>"
