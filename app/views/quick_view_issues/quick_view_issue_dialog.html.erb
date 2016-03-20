@@ -125,7 +125,7 @@
         <% if @relations.present? || User.current.allowed_to?(:manage_issue_relations, @project) %>
           <hr />
           <div id="relations">
-            <%= render :partial => '../../../../app/views/issues/relations' %>
+            <%= render :partial => 'issues/relations' %>
           </div>
         <% end %>
      </div>
@@ -133,14 +133,14 @@
      <% if changesets.present? %>
      <div id="issue-changesets">
      <h3><%=l(:label_associated_revisions)%></h3>
-     <%= render :partial => '../../../../app/views/issues/changesets', :locals => { :changesets => changesets} %>
+     <%= render :partial => 'issues/changesets', :locals => { :changesets => changesets} %>
      </div>
      <% end %>
 
      <% if journals.present? %>
      <div id="history">
      <h3><%=l(:label_history)%></h3>
-     <%= render :partial => '../../../../app/views/issues/history', :locals => { :issue => issue, :journals => journals } %>
+     <%= render :partial => 'issues/history', :locals => { :issue => issue, :journals => journals } %>
      </div>
      <% end %>
 
