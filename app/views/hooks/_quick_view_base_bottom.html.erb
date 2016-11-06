@@ -35,6 +35,10 @@ function quick_view_issue_dialog_init() {
     quick_view_issue_dialog_event_init($("tr.hascontextmenu > td"));
   }
   
+  if (body.hasClass("controller-calendars")) {
+    quick_view_issue_dialog_event_init($("div.issue"));
+  }
+
   if (body.hasClass("controller-gantts")) {
     quick_view_issue_dialog_event_init($("div.issue-subject"));
     quick_view_issue_dialog_event_init($("div.tooltip"));
