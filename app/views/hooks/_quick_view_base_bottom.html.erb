@@ -179,11 +179,15 @@ function quick_view_show_dialog() {
        continue;
      }
      <%# Issueの中で特殊な処理を行うその他のプラグインのために、先行で通常のIssueにアクセスする %>
-     var url = '<%= issue_path(0) %>'.replace(/0$/,issue_id);
-     $.ajax( { url: url, dataType: 'html' }).done( function () {
-       var url = '<%= quick_view_issue_path(0) %>'.replace(/0$/,issue_id);
-       $.ajax( { url: url, dataType: 'html', success: quick_view_dialog_open });
-     });
+     var open_dialog = quick_view_dialog_open;
+     var open = function () {
+       var url_test = '<%= issue_path(0) %>'.replace(/0$/,issue_id);
+       var url_dialog = '<%= quick_view_issue_path(0) %>'.replace(/0$/,issue_id);
+       $.ajax( { url: url_test, dataType: 'html' }).done( function () {
+         $.ajax( { url: url_dialog, dataType: 'html', success: quick_view_dialog_open  });
+       });
+     };
+     open();
   }
 }
 
