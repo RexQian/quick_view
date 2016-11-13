@@ -26,6 +26,17 @@ class QuickViewIssuesController < ApplicationController
     end
   end
 
+  def conflict
+    Issue.where('(start_date >= ? and (due_date <= ? or due_date is null)', @issue.start_date, @issue.due_date)
+    respond_to do |format|
+      format.html {
+        render :template => 'quick_view_issues/quick_view_portrait',
+               :layout => false,
+               :issue => @issue
+      }
+    end
+  end
+
 private
   def find_issue
     logger.info "issue_id => #{params[:id]}"

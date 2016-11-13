@@ -10,6 +10,7 @@ Redmine::Plugin.register :quick_view do
   version '0.2.0'
 
   settings :default => {'issue_dialog_size'=>'640,600',
+                        'issue_dialog_limit'=>9,
                         'issue_tooltip_enabled'=>'on',
                         'tooltip_attributes'=>[
                           'avatar',

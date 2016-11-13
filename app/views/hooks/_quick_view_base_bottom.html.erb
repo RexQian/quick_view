@@ -1,4 +1,10 @@
 <%
+  issue_dialog_limit = Setting.plugin_quick_view['issue_dialog_limit'] || ''
+  issue_dialog_limit = 9 unless issue_dialog_limit.match(/^\d+{1,5}$/)
+  issue_dialog_limit = issue_dialog_limit.to_i
+  issue_dialog_limit = 1 if issue_dialog_limit == 0
+  #logger.info "### limit = "+ issue_dialog_limit.inspect
+
   issue_dialog_size = Setting.plugin_quick_view['issue_dialog_size'].split(",")
   issue_dialog_size[0] = 640 if issue_dialog_size.length != 2 || !issue_dialog_size[0].match(/\d{3,4}/)
   issue_dialog_size[1] = 600 if issue_dialog_size.length != 2 || !issue_dialog_size[1].match(/\d{3,4}/)
@@ -174,6 +180,8 @@ function quick_view_show_dialog() {
   }
 
   quick_view_dialog_open_queue = arguments.length;
+  var issue_dialog_limit = <%= issue_dialog_limit %>;
+  var open_capacity = issue_dialog_limit - $('.quick_view_dialog').length;
   for (var i = 0; i < arguments.length; ++i) {
      var issue_id = arguments[i];
 
@@ -182,6 +190,12 @@ function quick_view_show_dialog() {
        already_exists.dialog("moveToTop");
        continue;
      }
+
+     if (open_capacity-- == 0) {
+       alert('The maximum number that can be opened has been limited.\nThis limitaion can be changed on the plugin setting page.');
+       return;
+     }
+
      <%# Issueの中で特殊な処理を行うその他のプラグインのために、先行で通常のIssueにアクセスする %>
      var open_dialog = quick_view_dialog_open;
      var open = function () {
