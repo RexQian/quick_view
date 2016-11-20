@@ -6,4 +6,4 @@ ja:
   button_quick_view: Quick View
 
   server_load_increase: "注意: この設定を有効にすると、サーバーの負荷が増加する可能性があります。"
-
+  dialog_num_exceeded: "オープン可能な最大数を超えました。\\nこの制限はプラグインの設定画面から変更することができます。"

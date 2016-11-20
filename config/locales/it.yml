@@ -5,3 +5,4 @@ it:
 
   button_quick_view: Quick View
   server_load_increase: "Nota: abilitando questo parametro e' possibile che il carico del server aumenti."
+  dialog_num_exceeded: "Il numero massimo che può essere aperto è stato limitato.\\nQuesta limitazione può essere modificato nella pagina di impostazione plugin."

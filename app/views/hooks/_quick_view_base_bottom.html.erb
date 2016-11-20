@@ -192,7 +192,7 @@ function quick_view_show_dialog() {
      }
 
      if (open_capacity-- == 0) {
-       alert('The maximum number that can be opened has been limited.\nThis limitaion can be changed on the plugin setting page.');
+       alert('<%= l(:dialog_num_exceeded) %>');
        return;
      }
 
