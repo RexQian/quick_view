@@ -1,6 +1,6 @@
 <%
   issue_dialog_limit = Setting.plugin_quick_view['issue_dialog_limit'] || ''
-  issue_dialog_limit = 9 unless issue_dialog_limit.match(/^\d+{1,5}$/)
+  issue_dialog_limit = 9 unless issue_dialog_limit..to_s.match(/^\d+{1,5}$/)
   issue_dialog_limit = issue_dialog_limit.to_i
   issue_dialog_limit = 1 if issue_dialog_limit == 0
   #logger.info "### limit = "+ issue_dialog_limit.inspect
