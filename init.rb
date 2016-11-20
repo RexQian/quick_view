@@ -7,7 +7,7 @@ Redmine::Plugin.register :quick_view do
   name 'Quick View plugin'
   author 'Akira Saito'
   description 'This plugin provides ability to view a details of the issue at the issues page.'
-  version '0.2.0'
+  version '0.3.0'
 
   settings :default => {'issue_dialog_size'=>'640,600',
                         'issue_dialog_limit'=>9,
