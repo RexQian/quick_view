@@ -1,0 +1,12 @@
+# Chinese strings go here for Rails i18n
+zh:
+  label_quick_view: Quick View
+  project_module_quick_view: Quick View Plugin
+
+  button_quick_view: Quick View
+
+  server_load_increase: "注意: 启用后可能会增加系统负载"
+  dialog_num_exceeded: "已达到对话框最大数量限制.\\n可以通过插件设置修改该配置."
+  details: 详情
+  edit: 编辑
+  cancel: 取消
