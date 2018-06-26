@@ -9,4 +9,4 @@ en:
   dialog_num_exceeded: "The maximum number that can be opened has been limited.\\nThis limitaion can be changed on the plugin setting page."
   details: details
   edit: edit
-  cancel: cancel
+  close: close

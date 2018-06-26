@@ -9,4 +9,4 @@ zh:
   dialog_num_exceeded: "已达到对话框最大数量限制.\\n可以通过插件设置修改该配置."
   details: 详情
   edit: 编辑
-  cancel: 取消
+  close: 关闭
